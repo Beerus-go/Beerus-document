@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: 
+heroImage: https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fupload.apkmi.com%2F2018%2F06%2Fc4c5d2db7cf7ea6d4c4234e9d144de34.jpg&refer=http%3A%2F%2Fupload.apkmi.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1641658492&t=9a2a0cd5f9ca01675f723170faeefdbc
 actionText: Document →
 actionLink: /beerus/index.md
 features:
