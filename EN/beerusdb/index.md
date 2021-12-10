@@ -274,7 +274,7 @@ param := entity.PageParam{
 result, err := operation.GetDBTemplate("Data source name").SelectPageCustomCount("select * from xt_message_board where user_name = {user_name} and user_email = {user_email}", countSql， param)
 ```
 
-## Service Management
+## Transaction Management
 
 ### Open a transaction
 ```go
