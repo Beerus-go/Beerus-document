@@ -3,7 +3,7 @@
 ## Installing dependencies
 
 ```shell
-go get github.com/yuyenews/Beerus v1.1.0
+go get github.com/yuyenews/Beerus
 ```
 
 ## The underlying technology used
