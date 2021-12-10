@@ -325,4 +325,4 @@ db.Commit(id)
 
 ## Web Management
 
-[Web Management](/beerus/index.html)
+[Click here -> Web Management](/beerus/index.html)

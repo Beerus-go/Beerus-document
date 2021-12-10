@@ -312,4 +312,4 @@ func updHandler(data []byte) {
 
 ## 数据库操作
 
-[数据库操作](/beerusdb/index.html)
+[点击此处->跳转到数据库操作](/beerusdb/index.html)

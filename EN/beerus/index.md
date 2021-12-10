@@ -314,4 +314,4 @@ Once the data is received, it can be converted directly to string
 
 ## Database operations
 
-[Database operations](/beerusdb/index.html)
+[Click here -> Database operations](/beerusdb/index.html)
