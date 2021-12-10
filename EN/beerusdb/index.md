@@ -5,7 +5,7 @@
 ### Installing dependencies
 
 ```shell
-go get github.com/yuyenews/Beerus-DB v1.1.0
+go get github.com/yuyenews/Beerus-DB
 ```
 
 ### Configuring the data source

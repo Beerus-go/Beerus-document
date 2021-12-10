@@ -5,7 +5,7 @@
 ### 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus-DB v1.1.0
+go get github.com/yuyenews/Beerus-DB
 ```
 
 ### 配置数据源
