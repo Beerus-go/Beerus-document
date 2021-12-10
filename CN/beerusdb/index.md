@@ -327,4 +327,4 @@ db.Commit(id)
 
 ## Web管理
 
-[Web管理](/beerus/index.html)
+[点击此处->跳转到Web管理](/beerus/index.html)
