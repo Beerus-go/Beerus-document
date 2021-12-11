@@ -10,6 +10,6 @@ features:
   details: 用到了[go-sql-driver/mysql]来做数据库连接与基础操作，在此基础上做了很多扩展，比如：连接池管理，多数据源，事务管理，单表无sql操作，多表以及复杂操作可以自己写sql，sql支持{}占位符，可以用struct作为参数来操作数据库等
 - title: Beerus-RPC
   details: 目前还在规划当中，作为Beerus的微服务组件，尽请期待哦......
-footer: 基于MIT协议的开源项目 | 如果您有项目上的问题需要帮助，可以到社区留言
+footer: 基于MIT协议的开源项目 | Telegram - https://t.me/beeruscc | Email - yuyemail123@gmail.com
 ---
 

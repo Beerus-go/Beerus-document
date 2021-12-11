@@ -10,6 +10,6 @@ features:
   details: Use [go-sql-driver/mysql] to do database connection and basic operations, based on this do a lot of extensions, such as, connection pool management, multiple data sources, transaction management, single table no sql operation, multiple tables and complex operations can write their own sql, sql support {} placeholder, can use struct as parameters to operate the database, etc.
 - title: Beerus-RPC
   details: Still in the planning stage, this is a microservice component of Beerus, so look out for it! ......
-footer: MIT protocol open source project | Telegram - https://t.me/beeruscc
+footer: MIT protocol open source project | Telegram - https://t.me/beeruscc | Email - yuyemail123@gmail.com
 ---
 
