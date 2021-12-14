@@ -21,7 +21,8 @@ module.exports = {
               { text: '简体中文', link: 'https://beeruscc.com/cn' },
               { text: 'English', link: 'https://beeruscc.com' }
             ]
-          }
+          },
+          { text: 'Java', link: 'https://magician-io.com' }
         ],
         sidebar: 'auto'
       }
