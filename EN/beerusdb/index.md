@@ -6,6 +6,8 @@
 
 ```shell
 go get github.com/yuyenews/Beerus-DB
+
+go get github.com/go-sql-driver/mysql
 ```
 
 ### Configuring the data source
