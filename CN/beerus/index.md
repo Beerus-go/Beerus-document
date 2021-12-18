@@ -3,7 +3,7 @@
 ## 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus
+go get github.com/yuyenews/Beerus@v1.1.3
 ```
 
 ## 架构组成
@@ -44,6 +44,9 @@ func CreateRoute() {
 // 可以获取到前端传来的参数，不限请求方式
 req.FormValue("参数name")
 
+// 可以获取到前端传来的多个同名参数，返回一个数组，只对：普通表单，json，get请求 生效，formData是无效的
+req.FormValues("参数name")
+
 // 可以获取到前端传来的请求头，不限请求方式
 req.HeaderValue("请求头name")
 
@@ -61,7 +64,7 @@ req.Json
 - 如果tag里面设置了field属性，会优先根据field去匹配，如果没匹配到 那么会根据字段名再匹配一次
 - 支持的类型，都在下面的示例中了
 - commons.BeeFile 类型 只对 formdata生效
-- []string 只对json生效
+- []string 只对：普通表单，json，get请求 生效，formData是无效的
 
 ```go
 // DemoParam If you have a struct like this, and you want to put all the parameters from the request into this struct
@@ -80,7 +83,7 @@ type DemoParam struct {
 
 	TestBeeFileReception   commons.BeeFile
 
-	TestJsonReception []string
+	TestArrayReception []string
 }
 ```
 

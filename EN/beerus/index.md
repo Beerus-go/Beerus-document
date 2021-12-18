@@ -3,7 +3,7 @@
 ## Installing dependencies
 
 ```shell
-go get github.com/yuyenews/Beerus
+go get github.com/yuyenews/Beerus@v1.1.3
 ```
 
 ## The underlying technology used
@@ -44,6 +44,9 @@ func CreateRoute() {
 // Get the parameters from the front end, regardless of the request method
 req.FormValue("name")
 
+// Get multiple parameters with the same name, return an array, only works for x-www-form-urlencoded, JSON, GET requests, FormData can only get one value
+req.FormValues("name")
+
 // Get the request header from the front end, regardless of the request method
 req.HeaderValue("name")
 
@@ -61,7 +64,7 @@ First, you need to define a struct, The matching rules are as follows
 - If the field attribute is set in the tag, it will be matched against the field first, if not then it will be matched against the field name again.
 - The supported types are shown in the following examples
 - commons.BeeFile type Only works on formdata
-- []string Only works with json
+- []string Only available for x-www-form-urlencoded, JSON, GET requests, FormData can only get one value.
 
 ```go
 // DemoParam If you have a struct like this, and you want to put all the parameters from the request into this struct
@@ -80,7 +83,7 @@ type DemoParam struct {
 
 	TestBeeFileReception   commons.BeeFile
 
-	TestJsonReception []string
+	TestReception []string
 }
 ```
 
