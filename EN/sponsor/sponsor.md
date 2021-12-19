@@ -24,3 +24,22 @@ If you like the project and would like to help, then buy the author a cup of cof
         <td style="border:0px;text-align:center" valign="top"><p style="width:150px;word-wrap: break-word; word-break: normal;">BTC：3CJrf3FzwGEXqDHqzN5L6CymKR8Z76pZX2</p></td>
     </tr>
 </table>
+
+<hr/>
+
+In addition to direct support, you can also indirectly support Oh, follow my WeChat public number, or QQ group
+
+<hr/>
+
+<table style="border:0px">
+    <tr style="border:0px">
+        <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/weixingzh.jpeg" width="200px"/></td>
+        <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/qq.png" width="200px"/></td>
+        <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/tealgram.jpeg" width="200px"/></td>
+    </tr>
+    <tr style="border:0px; background-color:#ffffff">
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">微信公众号：Magician-IO</p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">QQ群：773291321</p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">电报：<a href="https://t.me/beeruscc">https://t.me/beeruscc</a></p></td>
+    </tr>
+</table>
