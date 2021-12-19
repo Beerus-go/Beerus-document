@@ -22,9 +22,8 @@ sidebar: 'false'
         <td style="border:0px;text-align:center" valign="top"><p style="width:150px;word-wrap: break-word; word-break: normal;">BTC：3CJrf3FzwGEXqDHqzN5L6CymKR8Z76pZX2</p></td>
     </tr>
 </table>
+
 <hr/>
-
-
 
 除了直接的支持以外，还可以间接的支持一下哦，关注我的微信公众号，或者QQ群
 
