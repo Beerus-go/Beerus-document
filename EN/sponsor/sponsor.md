@@ -16,8 +16,9 @@ If you like the project and would like to help, then buy the author a cup of cof
     </tr>
     <tr style="border:0px; background-color:#ffffff">
         <td style="border:0px;text-align:center" valign="top">
-            <p style="width:150px">
-                <a href="https://www.paypal.com/paypalme/yuye666">Paypal</a>
+            <p style="width:150px;word-wrap: break-word; word-break: normal;">
+                Paypal:
+                <a href="https://www.paypal.com/paypalme/yuye666">https://www.paypal.com/paypalme/yuye666</a>
             </p>
         </td>
         <td style="border:0px;text-align:center" valign="top"><p style="width:150px;word-wrap: break-word; word-break: normal;">ETH：0xE02bb0ca283d6B058F8677607AB96EaBf0C13Bed</p></td>
@@ -38,8 +39,8 @@ In addition to direct support, you can also indirectly support Oh, follow my WeC
         <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/tealgram.jpeg" width="200px"/></td>
     </tr>
     <tr style="border:0px; background-color:#ffffff">
-        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">微信公众号：Magician-IO</p></td>
-        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">QQ群：773291321</p></td>
-        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">电报：<a href="https://t.me/beeruscc">https://t.me/beeruscc</a></p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">WeChat Public: Magician-IO</p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">QQ Group: 773291321</p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">Telegram: <a href="https://t.me/beeruscc">https://t.me/beeruscc</a></p></td>
     </tr>
 </table>
