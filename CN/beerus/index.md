@@ -3,7 +3,7 @@
 ## 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus@v1.1.3
+go get github.com/yuyenews/Beerus@v1.1.5
 ```
 
 ## 架构组成
@@ -25,13 +25,13 @@ go get github.com/yuyenews/Beerus@v1.1.3
 ```go
 func CreateRoute() {
 	// post route example
-    route.POST("/example/post", func (req *commons.BeeRequest, res *commons.BeeResponse) {
+    route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) {
         
         res.SendJson(`{"msg":"SUCCESS"}`)
     })
 
     // get route example
-    route.GET("/example/get", func (req *commons.BeeRequest, res *commons.BeeResponse) {
+    route.GET("/example/get", func (req commons.BeeRequest, res commons.BeeResponse) {
     
         res.SendJson(`{"msg":"SUCCESS"}`)
     })
@@ -44,7 +44,7 @@ func CreateRoute() {
 // 可以获取到前端传来的参数，不限请求方式
 req.FormValue("参数name")
 
-// 可以获取到前端传来的多个同名参数，返回一个数组，只对：普通表单，json，get请求 生效，formData是无效的
+// 可以获取到前端传来的多个同名参数，返回一个数组，只对：普通表单，get请求 生效，formData是无效的
 req.FormValues("参数name")
 
 // 可以获取到前端传来的请求头，不限请求方式
@@ -87,7 +87,32 @@ type DemoParam struct {
 }
 ```
 
-然后，调用 params.ToStruct函数 将req里面的参数全部提取到struct
+然后，将这个struct作为 路由函数的参数
+
+- 路由函数的参数：个数不限制，可以只设置一个struct，也可以设置多个struct，也可以像示例中这样 跟request，response混用
+
+```go
+// 注意看第一个参数
+route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) {
+
+	println(param.TestStringReception)
+	println(param.TestIntReception)
+	println(param.TestInt64Reception)
+	println(param.TestFloatReception)
+	println(param.TestUintReception)
+	println(param.TestUint64Reception)
+	println(param.TestBoolReception)
+
+	//print(param.TestBeeFileReception.FileHeader.Filename)
+	//print(": ")
+	//println(param.TestBeeFileReception.FileHeader.Size)
+
+	res.SendJson(`{"msg":"hello word"}`)
+})
+```
+
+也可以手工提取，调用 params.ToStruct函数 将req里面的参数全部提取到struct
+
 - 第一个参数是req
 - 第二个参数是 struct的指针
 - 第三个参数是 struct的值
@@ -180,6 +205,64 @@ res.SendStream("filename", []byte)
 
 // 返回其他自定义content-type的数据给客户端
 res.SendData("data")
+```
+
+### JSON模式
+
+- 当开启了JSON模式，后端只会给前端响应json格式的数据，开启方式如下
+- 其实默认就是开启的，如果不需要的话可以关闭，关闭方式就是设置为false
+
+```go
+route.JsonMode = true
+```
+
+JSON模式下的路由
+
+- 参数规则和 非JSON模式一模一样
+- 但是路由函数必须有返回值，返回值类型支持：struct，map，数组，这里为了演示方便就用的map，实际上支持三种
+- beerus会自动将返回值 转成json响应给前端
+
+```go
+route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) map[string]string{
+
+	println(param.TestStringReception)
+	println(param.TestIntReception)
+	println(param.TestInt64Reception)
+	println(param.TestFloatReception)
+	println(param.TestUintReception)
+	println(param.TestUint64Reception)
+	println(param.TestBoolReception)
+
+	msg := make(map[string]string)
+	msg["msg"] = "success"
+	return msg
+})
+```
+
+JSON模式下，如果你想实现文件下载功能
+
+```go
+// Example of file download
+route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse) string {
+	file, err := ioutil.ReadFile("/Users/yeyu/Downloads/goland-2021.2.4.dmg")
+	if err == nil {
+
+	}
+	// 将文件写入客户端
+	res.SendStream("goland.dmg", file)
+
+	// 返回这个常量即可
+	return web.Download
+})
+``
+
+JSON模式还有一个刺激的地方
+
+- 就是不需要手工验证参数了，只需要在接收参数的struct的字段上加上验证用的tag，beerus会自动帮验证
+- 如果验证没有通过，会返回一个json消息给前端
+
+```json
+{"code":1128, "msg":"你在验证tag中设置的msg"}
 ```
 
 ### 拦截器

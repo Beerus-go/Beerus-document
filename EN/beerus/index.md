@@ -3,7 +3,7 @@
 ## Installing dependencies
 
 ```shell
-go get github.com/yuyenews/Beerus@v1.1.3
+go get github.com/yuyenews/Beerus@v1.1.5
 ```
 
 ## The underlying technology used
@@ -44,7 +44,7 @@ func CreateRoute() {
 // Get the parameters from the front end, regardless of the request method
 req.FormValue("name")
 
-// Get multiple parameters with the same name, return an array, only works for x-www-form-urlencoded, JSON, GET requests, FormData can only get one value
+// Get multiple parameters with the same name, return an array, only works for x-www-form-urlencoded, GET requests, FormData can only get one value
 req.FormValues("name")
 
 // Get the request header from the front end, regardless of the request method
@@ -87,7 +87,31 @@ type DemoParam struct {
 }
 ```
 
-Then, call the params.ToStruct function to extract all the parameters from req to struct
+Then, use this struct as a parameter to the routing function
+
+- The number of parameters of the routing function is unlimited, you can set only one struct or multiple structs, or you can mix them with request and response as in the example
+
+```go
+// Note the first parameter
+route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) {
+
+	println(param.TestStringReception)
+	println(param.TestIntReception)
+	println(param.TestInt64Reception)
+	println(param.TestFloatReception)
+	println(param.TestUintReception)
+	println(param.TestUint64Reception)
+	println(param.TestBoolReception)
+
+	//print(param.TestBeeFileReception.FileHeader.Filename)
+	//print(": ")
+	//println(param.TestBeeFileReception.FileHeader.Size)
+
+	res.SendJson(`{"msg":"hello word"}`)
+})
+```
+
+Can also be extracted manually, call the params.ToStruct function to extract all the parameters from req to struct
 - The first argument is req
 - the second argument is a pointer to struct
 - The third argument is the value of struct
@@ -180,6 +204,64 @@ res.SendStream("filename", []byte)
 
 // Return other custom content-type data to the client
 res.SendData("data")
+```
+
+### JSON mode
+
+- When JSON mode is enabled, the back-end will only respond to the front-end with data in json format, which is enabled as follows
+- It is actually on by default, but can be turned off if not needed, by setting it to false
+
+```go
+route.JsonMode = true
+```
+
+Routing in JSON mode
+
+- The parameter rules are exactly the same as for non-JSON modes
+- But the routing function must have a return value, the return value type supports: struct, map, array, here for demonstration purposes we use map, actually support three
+- beerus will automatically convert the return value into a json response to the front end
+
+```go
+route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) map[string]string{
+
+	println(param.TestStringReception)
+	println(param.TestIntReception)
+	println(param.TestInt64Reception)
+	println(param.TestFloatReception)
+	println(param.TestUintReception)
+	println(param.TestUint64Reception)
+	println(param.TestBoolReception)
+
+	msg := make(map[string]string)
+	msg["msg"] = "success"
+	return msg
+})
+```
+
+JSON mode, if you want to implement a file download function
+
+```go
+// Example of file download
+route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse) string {
+	file, err := ioutil.ReadFile("/Users/yeyu/Downloads/goland-2021.2.4.dmg")
+	if err == nil {
+
+	}
+	// Writing files to the client
+	res.SendStream("goland.dmg", file)
+
+	// Just return this constant
+	return web.Download
+})
+```
+
+There is another exciting aspect of the JSON model
+
+- You don't need to validate the parameters manually, you just need to add a validation tag to the field of the struct that receives the parameters and beerus will automatically validate it for you.
+- If the validation does not pass, a json message will be returned to the front-end
+
+```json
+{"code":1128, "msg":"The msg you set in the validation tag"}
 ```
 
 ### Interceptors
