@@ -15,7 +15,7 @@ module.exports = {
               { text: 'Beerus-db', link: '/beerusdb/index.md' }
             ]
           },
-          { text: 'Video', link: 'https://www.bilibili.com/video/BV1cZ4y1X79f/' }, 
+          { text: 'Video', link: 'https://www.bilibili.com/video/BV1JR4y1W7fJ/' }, 
           {
             text: 'Languages',
             items: [

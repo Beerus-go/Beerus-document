@@ -177,14 +177,6 @@ if result != params.SUCCESS {
     res.SendErrorMsg(1128, result)
     return
 }
-
-// There is also a one-step approach, calling the params.ToStructAndValidation function
-// Extraction of parameters + data validation in one step
-var result = params.ToStructAndValidation(req, &param, param)
-if result != params.SUCCESS {
-    res.SendErrorMsg(1128, result)
-    return
-}
 ```
 
 ### Returning data to the client

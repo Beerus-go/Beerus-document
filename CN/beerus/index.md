@@ -178,14 +178,6 @@ if result != params.SUCCESS {
     res.SendErrorMsg(1128, result)
     return
 }
-
-// 还有一步到位的方法，调用params.ToStructAndValidation函数
-// 提取参数+数据验证，一步到位
-var result = params.ToStructAndValidation(req, &param, param)
-if result != params.SUCCESS {
-    res.SendErrorMsg(1128, result)
-    return
-}
 ```
 
 ### 响应数据
@@ -254,7 +246,7 @@ route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse
 	// 返回这个常量即可
 	return web.Download
 })
-``
+```
 
 JSON模式还有一个刺激的地方
 
