@@ -42,16 +42,16 @@ func CreateRoute() {
 
 ```go
 // Get the parameters from the front end, regardless of the request method
-req.FormValue("name")
+req.FormValue("param name")
 
 // Get multiple parameters with the same name, return an array, only works for x-www-form-urlencoded, GET requests, FormData can only get one value
-req.FormValues("name")
+req.FormValues("param name")
 
 // Get the request header from the front end, regardless of the request method
-req.HeaderValue("name")
+req.HeaderValue("header name")
 
 // Get the file from the front-end, form-data only
-req.GetFile("name")
+req.GetFile("param name")
 
 // Get the json string passed as json
 req.Json
