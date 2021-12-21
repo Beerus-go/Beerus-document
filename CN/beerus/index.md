@@ -3,7 +3,7 @@
 ## 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus@v1.1.5
+go get github.com/yuyenews/Beerus@v1.1.6
 ```
 
 ## 架构组成
