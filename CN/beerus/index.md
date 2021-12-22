@@ -250,8 +250,19 @@ route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse
 
 JSON模式还有一个刺激的地方
 
-- 就是不需要手工验证参数了，只需要在接收参数的struct的字段上加上验证用的tag，beerus会自动帮验证
-- 如果验证没有通过，会返回一个json消息给前端
+- 不需要手工调用 params.Validation 来验证参数了，只需要在接收参数的struct的字段上加上验证用的tag，beerus会自动帮验证
+
+```go
+// JSON模式不需要 写这段代码，beerus会自动帮验证
+// 之所以把这段代码贴在这，是为了说清楚 到底是不需要写哪段代码
+var result = params.Validation(req, &param, param)
+if result != params.SUCCESS {
+    res.SendErrorMsg(1128, result)
+    return
+}
+```
+
+如果验证没有通过，会返回一个json消息给前端
 
 ```json
 {"code":1128, "msg":"你在验证tag中设置的msg"}

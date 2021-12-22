@@ -250,7 +250,18 @@ route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse
 There is another exciting aspect of the JSON model
 
 - You don't need to validate the parameters manually, you just need to add a validation tag to the field of the struct that receives the parameters and beerus will automatically validate it for you.
-- If the validation does not pass, a json message will be returned to the front-end
+
+```go
+// There is no need to write this code for JSON mode, beerus will automatically validate it for you.
+// The reason for posting this code here is so you can visually see which code you don't need to write
+var result = params.Validation(req, &param, param)
+if result != params.SUCCESS {
+    res.SendErrorMsg(1128, result)
+    return
+}
+```
+
+If the validation does not pass, a json message will be returned to the front-end
 
 ```json
 {"code":1128, "msg":"The msg you set in the validation tag"}
