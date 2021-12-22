@@ -25,13 +25,13 @@ In addition to the underlying technologies described above, there are many other
 ```go
 func CreateRoute() {
 	// post route example
-    route.POST("/example/post", func (req *commons.BeeRequest, res *commons.BeeResponse) {
+    route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) {
         
         res.SendJson(`{"msg":"SUCCESS"}`)
     })
 
     // get route example
-    route.GET("/example/get", func (req *commons.BeeRequest, res *commons.BeeResponse) {
+    route.GET("/example/get", func (req commons.BeeRequest, res commons.BeeResponse) {
     
         res.SendJson(`{"msg":"SUCCESS"}`)
     })
