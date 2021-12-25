@@ -3,7 +3,7 @@
 ## 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus@v1.1.6
+go get github.com/yuyenews/Beerus@v1.1.7
 ```
 
 ## 架构组成
@@ -21,19 +21,25 @@ go get github.com/yuyenews/Beerus@v1.1.6
 - 直接调用route 下面的函数即可，需要什么请求方式 就调用什么请求方式的函数
 - 第一个参数是路由的URL，就是前端请求的地址
 - 第二个参数是 一个函数，当前端请求这个URL，服务端就会自动执行这个函数
+- 第二个参数（函数） 必须有返回值，支持struct，map，数组，beerus会自动将返回值转成Json响应给前端，这里为了演示方便就用的map
+- 如果你不喜欢这种响应方式，或者你不打算在你的项目里采用JSON来跟前端交互，那么可以关闭JSON模式，这个后面会讲
 
 ```go
 func CreateRoute() {
 	// post route example
-    route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) {
+    route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) map[string]string {
         
-        res.SendJson(`{"msg":"SUCCESS"}`)
+        msg := make(map[string]string)
+		msg["msg"] = "success"
+		return param
     })
 
     // get route example
-    route.GET("/example/get", func (req commons.BeeRequest, res commons.BeeResponse) {
+    route.GET("/example/get", func (req commons.BeeRequest, res commons.BeeResponse) map[string]string{
     
-        res.SendJson(`{"msg":"SUCCESS"}`)
+        msg := make(map[string]string)
+		msg["msg"] = "success"
+		return param
     })
 }
 ```
@@ -93,7 +99,7 @@ type DemoParam struct {
 
 ```go
 // 注意看第一个参数
-route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) {
+route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) map[string]string {
 
 	println(param.TestStringReception)
 	println(param.TestIntReception)
@@ -103,11 +109,9 @@ route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res co
 	println(param.TestUint64Reception)
 	println(param.TestBoolReception)
 
-	//print(param.TestBeeFileReception.FileHeader.Filename)
-	//print(": ")
-	//println(param.TestBeeFileReception.FileHeader.Size)
-
-	res.SendJson(`{"msg":"hello word"}`)
+	msg := make(map[string]string)
+	msg["msg"] = "success"
+	return param
 })
 ```
 
@@ -115,14 +119,13 @@ route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res co
 
 - 第一个参数是req
 - 第二个参数是 struct的指针
-- 第三个参数是 struct的值
 
 当执行完 params.ToStruct函数，param里就会有数据了
 ```go
 param := DemoParam{}
 
 // Extraction parameters, Generally used in scenarios where verification is not required or you want to verify manually
-params.ToStruct(req, &param, param)
+params.ToStruct(req, &param)
 ```
 
 ### 启动服务
@@ -168,19 +171,85 @@ type DemoParam struct {
 }
 ```
 
-要让上面的配置生效，必须再做一件事，看如下示例，注意看注释
+配置完上面这些之后，参数验证就自动生效了，如果验证没有通过，会返回一个json消息给前端
+
+```json
+{"code":1128, "msg":"你在验证tag中设置的msg"}
+```
+
+### 异常处理机制
+
+- 在开发中，我们会经常给前端一些错误提示信息，按照常规的做法，我们需要在if里面 手工返回提示信息，但是这种写法不太优雅
+- 我们可以利用go里面的error来实现 错误提示
+- 给路由函数设置第二个返回值，类型必须是error
 
 ```go
-// 调用params.Validation 函数进行验证
-var result = params.Validation(req, &param, param)
+// post route example
+route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) (map[string]string, error) {
+
+	if xxx {
+		return nil, errors.New("错误提示信息")
+	}
+	
+	msg := make(map[string]string)
+	msg["msg"] = "success"
+	return param, nil
+})
+```
+
+### 文件下载功能
+
+```go
+// Example of file download
+route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse) string {
+	file, err := ioutil.ReadFile("/Users/yeyu/Downloads/goland-2021.2.4.dmg")
+	if err == nil {
+
+	}
+	// 将文件写入客户端
+	res.SendStream("goland.dmg", file)
+
+	// 返回这个常量即可
+	return web.Download
+})
+```
+
+### 关闭JSON模式
+
+关闭方式很简单， 只需要在创建路由前，加入以下代码即可
+
+```go
+route.JsonMode = true
+```
+
+JSON模式一旦关闭，自动校验功能将会失效，因为beerus无法预知你打算用什么类型给前端响应，所以就直接把这个权限交给开发者了
+
+- 在你的路由里面，加上如下代码即可
+
+```go
+// 调用params.Validation 函数进行验证，第二个参数是提取到了请求参数的 struct的指针
+var result = params.Validation(req, &param)
 // 当返回的不是SUCCESS，就说明验证没通过
 if result != params.SUCCESS {
+	// 这里可以自己选择合适的 SendXXX 函数
     res.SendErrorMsg(1128, result)
     return
 }
 ```
 
-### 响应数据
+- 路由函数不可以有返回值，必须调用res里面的SendXXX函数 给前端响应数据
+
+```go
+// post route example
+route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) {
+	// 返回纯文本给客户端
+	res.SendText("text")
+})
+```
+
+- 响应数据
+
+我们提供了以下几个函数，来实现数据响应，你可以跟自己的需求，选择合适的函数
 
 ```go
 // 返回json给客户端
@@ -199,82 +268,16 @@ res.SendStream("filename", []byte)
 res.SendData("data")
 ```
 
-### JSON模式
-
-- 当开启了JSON模式，后端只会给前端响应json格式的数据，开启方式如下
-- 其实默认就是开启的，如果不需要的话可以关闭，关闭方式就是设置为false
-
-```go
-route.JsonMode = true
-```
-
-JSON模式下的路由
-
-- 参数规则和 非JSON模式一模一样
-- 但是路由函数必须有返回值，返回值类型支持：struct，map，数组，这里为了演示方便就用的map，实际上支持三种
-- beerus会自动将返回值 转成json响应给前端
-
-```go
-route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) map[string]string{
-
-	println(param.TestStringReception)
-	println(param.TestIntReception)
-	println(param.TestInt64Reception)
-	println(param.TestFloatReception)
-	println(param.TestUintReception)
-	println(param.TestUint64Reception)
-	println(param.TestBoolReception)
-
-	msg := make(map[string]string)
-	msg["msg"] = "success"
-	return msg
-})
-```
-
-JSON模式下，如果你想实现文件下载功能
-
-```go
-// Example of file download
-route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse) string {
-	file, err := ioutil.ReadFile("/Users/yeyu/Downloads/goland-2021.2.4.dmg")
-	if err == nil {
-
-	}
-	// 将文件写入客户端
-	res.SendStream("goland.dmg", file)
-
-	// 返回这个常量即可
-	return web.Download
-})
-```
-
-JSON模式还有一个刺激的地方
-
-- 不需要手工调用 params.Validation 来验证参数了，只需要在接收参数的struct的字段上加上验证用的tag，beerus会自动帮验证
-
-```go
-// JSON模式不需要 写这段代码，beerus会自动帮验证
-// 之所以把这段代码贴在这，是为了说清楚 到底是不需要写哪段代码
-var result = params.Validation(req, &param, param)
-if result != params.SUCCESS {
-    res.SendErrorMsg(1128, result)
-    return
-}
-```
-
-如果验证没有通过，会返回一个json消息给前端
-
-```json
-{"code":1128, "msg":"你在验证tag中设置的msg"}
-```
-
 ### 拦截器
 
 - 创建拦截器，跟创建路由特别像，直接调用 route.AddInterceptor函数即可
 - 第一个参数是 要拦截的路由路径，支持 * 通配符
 - 第二个参数是一个函数，里面可以实现拦截逻辑
-- 如果予以放行，直接返回SUCCESS，否则直接返回 提示信息
-- 跟路由一样，需要在main函数里调用一下 CreateInterceptor 函数
+- 如果予以放行，直接返回true，否则返回false
+
+注意点：
+
+***如果你在拦截器里返回false，那么务必要调用res.SendXXX 函数给前端一个响应，不然本次请求会一直阻塞到超时，对性能造成影响***
 
 ```go
 // 需要在main函数里调用一下这个函数
@@ -282,11 +285,11 @@ func CreateInterceptor() {
 	route.AddInterceptor("/example/*", loginInterceptorBefore)
 }
 
-func loginInterceptorBefore(req *commons.BeeRequest, res *commons.BeeResponse) string {
+func loginInterceptorBefore(req *commons.BeeRequest, res *commons.BeeResponse) bool {
 	res.SetHeader("hello", "hello word").SetHeader("hello2", "word2")
 
 	log.Println("exec interceptor")
-	return params.SUCCESS
+	return true
 }
 ```
 

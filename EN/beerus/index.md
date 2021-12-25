@@ -3,7 +3,7 @@
 ## Installing dependencies
 
 ```shell
-go get github.com/yuyenews/Beerus@v1.1.6
+go get github.com/yuyenews/Beerus@v1.1.7
 ```
 
 ## The underlying technology used
@@ -21,19 +21,25 @@ In addition to the underlying technologies described above, there are many other
 - Simply call the functions below the route, choosing the most appropriate function for the type of request you need
 - The first parameter is the URL of the route, which is the address requested by the front-end
 - The second parameter is a function that will be automatically executed by the server when the front-end requests this URL
+- The second parameter (function) must have a return value, the supported types are: struct, map, array, beerus will automatically convert the return value into a Json response to the front end, here for the sake of demonstration convenience to use the map
+- If you don't like this type of response, or you don't intend to use JSON to interact with the front-end in your project, then you can turn off JSON mode, which will be discussed later
 
 ```go
 func CreateRoute() {
 	// post route example
-    route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) {
+    route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) map[string]string {
         
-        res.SendJson(`{"msg":"SUCCESS"}`)
+        msg := make(map[string]string)
+		msg["msg"] = "success"
+		return param
     })
 
     // get route example
-    route.GET("/example/get", func (req commons.BeeRequest, res commons.BeeResponse) {
+    route.GET("/example/get", func (req commons.BeeRequest, res commons.BeeResponse) map[string]string{
     
-        res.SendJson(`{"msg":"SUCCESS"}`)
+        msg := make(map[string]string)
+		msg["msg"] = "success"
+		return param
     })
 }
 ```
@@ -93,7 +99,7 @@ Then, use this struct as a parameter to the routing function
 
 ```go
 // Note the first parameter
-route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) {
+route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) map[string]string {
 
 	println(param.TestStringReception)
 	println(param.TestIntReception)
@@ -103,25 +109,22 @@ route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res co
 	println(param.TestUint64Reception)
 	println(param.TestBoolReception)
 
-	//print(param.TestBeeFileReception.FileHeader.Filename)
-	//print(": ")
-	//println(param.TestBeeFileReception.FileHeader.Size)
-
-	res.SendJson(`{"msg":"hello word"}`)
+	msg := make(map[string]string)
+	msg["msg"] = "success"
+	return param
 })
 ```
 
 Can also be extracted manually, call the params.ToStruct function to extract all the parameters from req to struct
 - The first argument is req
 - the second argument is a pointer to struct
-- The third argument is the value of struct
 
 When the params.ToStruct function is finished, there will be data in param
 ```go
 param := DemoParam{}
 
 // Extraction parameters, Generally used in scenarios where verification is not required or you want to verify manually
-params.ToStruct(req, &param, param)
+params.ToStruct(req, &param)
 ```
 
 ### Launching services
@@ -167,19 +170,83 @@ type DemoParam struct {
 }
 ```
 
-For the above configuration to take effect, one more thing must be done, see the following example and pay attention to the comments
+Once the above has been configured, parameter validation will automatically take effect and a json message will be automatically returned to the front-end if the validation does not pass
+
+```json
+{"code":1128, "msg":"The msg you set in the validation tag"}
+```
+
+### Exception handling mechanism
+
+- In development, we often give the front-end some error messages, according to the conventional practice, we need to manually return the message in the if, but this is not very elegant way to write
+- We can use error in go to achieve this
+- Set a second return value for the routing function, which must be of type error
 
 ```go
-// Call the params.Validation function and perform validation
-var result = params.Validation(req, &param, param)
-// When the return is not SUCCESS, it means that the authentication did not pass
+// post route example
+route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) (map[string]string, error) {
+
+	if xxx {
+		return nil, errors.New("The error message you want to return to the front-end")
+	}
+	
+	msg := make(map[string]string)
+	msg["msg"] = "success"
+	return param, nil
+})
+```
+
+### File download
+
+```go
+// Example of file download
+route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse) string {
+	file, err := ioutil.ReadFile("/Users/yeyu/Downloads/goland-2021.2.4.dmg")
+	if err == nil {
+
+	}
+	// Writing files to the client
+	res.SendStream("goland.dmg", file)
+
+	// Just return this constant
+	return web.Download
+})
+```
+
+### Turn off JSON mode
+
+It's easy to turn off, just add the following code before creating the route
+
+```go
+route.JsonMode = true
+```
+
+Once JSON mode is turned off, automatic validation will not work as beerus cannot predict what type of data you intend to return to the front end, so the developer will need to manually call a function to validate
+
+- In your route, add the following code to implement parameter validation
+
+```go
+// Validation function is called with the second parameter being a pointer to the struct from which the request parameters were extracted
+var result = params.Validation(req, &param)
+// When the return is not SUCCESS, it means that the validation did not pass
 if result != params.SUCCESS {
+    // Here you can choose the appropriate SendXXX function yourself
     res.SendErrorMsg(1128, result)
     return
 }
 ```
 
-### Returning data to the client
+- The routing function cannot have a return value and must call the SendXXX function inside res to respond to the front-end data
+
+```go
+// post route example
+route.POST("/example/post", func (req commons.BeeRequest, res commons.BeeResponse) {
+
+	res.SendText("text")
+})
+```
+
+- Returning data to the client
 
 ```go
 // Return json to client
@@ -198,82 +265,16 @@ res.SendStream("filename", []byte)
 res.SendData("data")
 ```
 
-### JSON mode
-
-- When JSON mode is enabled, the back-end will only respond to the front-end with data in json format, which is enabled as follows
-- It is actually on by default, but can be turned off if not needed, by setting it to false
-
-```go
-route.JsonMode = true
-```
-
-Routing in JSON mode
-
-- The parameter rules are exactly the same as for non-JSON modes
-- But the routing function must have a return value, the return value type supports: struct, map, array, here for demonstration purposes we use map, actually support three
-- beerus will automatically convert the return value into a json response to the front end
-
-```go
-route.POST("/example/post", func(param DemoParam, req commons.BeeRequest, res commons.BeeResponse) map[string]string{
-
-	println(param.TestStringReception)
-	println(param.TestIntReception)
-	println(param.TestInt64Reception)
-	println(param.TestFloatReception)
-	println(param.TestUintReception)
-	println(param.TestUint64Reception)
-	println(param.TestBoolReception)
-
-	msg := make(map[string]string)
-	msg["msg"] = "success"
-	return msg
-})
-```
-
-JSON mode, if you want to implement a file download function
-
-```go
-// Example of file download
-route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse) string {
-	file, err := ioutil.ReadFile("/Users/yeyu/Downloads/goland-2021.2.4.dmg")
-	if err == nil {
-
-	}
-	// Writing files to the client
-	res.SendStream("goland.dmg", file)
-
-	// Just return this constant
-	return web.Download
-})
-```
-
-There is another exciting aspect of the JSON model
-
-- You don't need to validate the parameters manually, you just need to add a validation tag to the field of the struct that receives the parameters and beerus will automatically validate it for you.
-
-```go
-// There is no need to write this code for JSON mode, beerus will automatically validate it for you.
-// The reason for posting this code here is so you can visually see which code you don't need to write
-var result = params.Validation(req, &param, param)
-if result != params.SUCCESS {
-    res.SendErrorMsg(1128, result)
-    return
-}
-```
-
-If the validation does not pass, a json message will be returned to the front-end
-
-```json
-{"code":1128, "msg":"The msg you set in the validation tag"}
-```
-
 ### Interceptors
 
 - Creating an interceptor is particularly similar to creating a route, just call the route.AddInterceptor function
 - The first parameter is the path of the route to be intercepted and supports * wildcards
 - The second parameter is a function that implements the interceptor logic
-- If it is allowed, it returns SUCCESS, otherwise it returns a prompt message
-- As with the route, the CreateInterceptor function needs to be called in the main function
+- Returns true directly if it passes, false otherwise
+
+Points to note:
+
+***If you return false in the interceptor, it's important to call the res.SendXXX function to give the front-end a response, otherwise the request will block until it times out, with a performance impact***
 
 ```go
 // This function needs to be called in the main function
@@ -281,11 +282,11 @@ func CreateInterceptor() {
 	route.AddInterceptor("/example/*", loginInterceptorBefore)
 }
 
-func loginInterceptorBefore(req *commons.BeeRequest, res *commons.BeeResponse) string {
+func loginInterceptorBefore(req *commons.BeeRequest, res *commons.BeeResponse) bool {
 	res.SetHeader("hello", "hello word").SetHeader("hello2", "word2")
 
 	log.Println("exec interceptor")
-	return params.SUCCESS
+	return true
 }
 ```
 
