@@ -5,7 +5,7 @@
 ### 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus-DB@v1.1.1
+go get github.com/yuyenews/Beerus-DB@v1.1.2
 
 go get github.com/go-sql-driver/mysql
 ```
@@ -85,7 +85,7 @@ conditions = append(conditions, entity.GetCondition("id = ?", 1))
 data := ResultStruct{UserName: "TestNoSqlUpdate"}
 
 // 执行修改操作
-result, err := operation.GetDBTemplate("Data source name").Update("table name", dbutil.StructToMapIgnore(&data, data, true),conditions)
+result, err := operation.GetDBTemplate("Data source name").Update("table name", dbutil.StructToMapIgnore(&data, true),conditions)
 ```
 
 ### 根据条件删除单表数据
@@ -108,7 +108,7 @@ data := ResultStruct{
     UpdateTime: "2021-12-09 13:50:00",
 }
 
-result, err := operation.GetDBTemplate("Data source name").Insert("table name", dbutil.StructToMapIgnore(&data, data, true))
+result, err := operation.GetDBTemplate("Data source name").Insert("table name", dbutil.StructToMapIgnore(&data, true))
 ```
 
 ### 条件设定器说明
@@ -165,11 +165,11 @@ type ResultStruct struct {
 ```go
 // 直接使用，这种方式会让ignore 失效，无论设置成啥都不起作用
 // 将他的返回值 作为参数 在调用DBTemplete里面的函数时使用
-dbutil.StructToMap(&data, data)
+dbutil.StructToMap(&data)
 
 // 让ignore 生效
 // 同样的，将他的返回值 作为参数，在调用DBTemplete里面的函数时使用
-dbutil.StructToMapIgnore(&data, data, true)
+dbutil.StructToMapIgnore(&data, true)
 ```
 
 ### 查询结果转化成struct
@@ -180,8 +180,8 @@ dbutil.StructToMapIgnore(&data, data, true)
 // 要转化成的目标struct
 res := ResultStruct{}
 
-// 转化函数，第一个参数是 要转化的数据，第二个参数是目标struct的指针，第三个参数是目标struct本身
-dbutil.MapToStruct(row, &res, res)
+// 转化函数，第一个参数是 要转化的数据，第二个参数是目标struct的指针
+dbutil.MapToStruct(row, &res)
 ```
 
 经过了上面的转化，res里面就会有数据了
@@ -208,10 +208,10 @@ resultMap, err := operation.GetDBTemplate("Data source name").SelectOne("select 
 res := ResultStruct{Id: 1}
 
 // 查多条, 注：这里需要用到占位符
-resultMap, err := operation.GetDBTemplate("Data source name").SelectListByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res, res))
+resultMap, err := operation.GetDBTemplate("Data source name").SelectListByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res))
 
 // 查一条, 注：这里需要用到占位符
-resultMap, err := operation.GetDBTemplate("Data source name").SelectOneByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res, res))
+resultMap, err := operation.GetDBTemplate("Data source name").SelectOneByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res))
 ```
 
 ### 根据数组参数做增删改
@@ -232,7 +232,7 @@ operation.GetDBTemplate("Data source name").Exec("update xt_message_board set us
 res := ResultStruct{Id: 1, UserName: "TestUpdateByMap"}
 
 // 无论是增删改，都是调用ExecByMap函数，将sql和参数传入即可，注：这里需要用到占位符
-operation.GetDBTemplate("Data source name").ExecByMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res, res))
+operation.GetDBTemplate("Data source name").ExecByMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res))
 
 ```
 
@@ -250,7 +250,7 @@ data := ResultStruct{
 param := entity.PageParam{
     CurrentPage: 1,  // 第几页
     PageSize: 20,  // 每页多少条
-    Params: dbutil.StructToMap(&data, data)， // 查询参数
+    Params: dbutil.StructToMap(&data)， // 查询参数
 }
 
 // 执行查询操作
@@ -272,7 +272,7 @@ countSql := "Your own definition of countSql"
 param := entity.PageParam{
     CurrentPage: 1,  // 第几页
     PageSize: 20,  // 每页多少条
-    Params: dbutil.StructToMap(&data, data)， // 查询参数
+    Params: dbutil.StructToMap(&data)， // 查询参数
 }
 
 // 执行查询操作
@@ -315,7 +315,7 @@ res := ResultStruct{Id: 1, UserName: "TestUpdateTx"}
 
 // 注：这里使用的不是GetDBTemplate，ExecByMap，而是 GetDBTemplateTx 和 ExecByTxMap
 // 使用事务和不使用事务，在调用的函数上，区别就是多了个Tx
-ss, err := operation.GetDBTemplateTx(id, "dbPoolTest").ExecByTxMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res, res))
+ss, err := operation.GetDBTemplateTx(id, "dbPoolTest").ExecByTxMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res))
 
 if err != nil {
     // 如果有问题就回滚事务

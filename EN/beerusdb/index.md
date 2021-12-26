@@ -5,7 +5,7 @@
 ### Installing dependencies
 
 ```shell
-go get github.com/yuyenews/Beerus-DB@v1.1.1
+go get github.com/yuyenews/Beerus-DB@v1.1.2
 
 go get github.com/go-sql-driver/mysql
 ```
@@ -83,7 +83,7 @@ conditions = append(conditions, entity.GetCondition("id = ?", 1))
 data := ResultStruct{UserName: "TestNoSqlUpdate"}
 
 // Execute the modification operation
-result, err := operation.GetDBTemplate("Data source name").Update("table name", dbutil.StructToMapIgnore(&data, data, true),conditions)
+result, err := operation.GetDBTemplate("Data source name").Update("table name", dbutil.StructToMapIgnore(&data, true),conditions)
 ```
 
 ### Delete single table data based on conditions
@@ -106,7 +106,7 @@ data := ResultStruct{
     UpdateTime: "2021-12-09 13:50:00",
 }
 
-result, err := operation.GetDBTemplate("Data source name").Insert("table name", dbutil.StructToMapIgnore(&data, data, true))
+result, err := operation.GetDBTemplate("Data source name").Insert("table name", dbutil.StructToMapIgnore(&data, true))
 ```
 
 ### Description of condition setters
@@ -163,11 +163,11 @@ The above examples of single table operations already show the usage of entities
 ```go
 // Used directly, this way the ignore is disabled and will not work no matter what it is set to
 // Use his return value as a parameter when calling DBTemplete's function
-dbutil.StructToMap(&data, data)
+dbutil.StructToMap(&data)
 
 // Making ignore work
 // Similarly, use his return value as a parameter when calling DBTemplete's function
-dbutil.StructToMapIgnore(&data, data, true)
+dbutil.StructToMapIgnore(&data, true)
 ```
 
 ### Query results into struct
@@ -178,8 +178,8 @@ The query returns each row of data as a map type, which needs to be converted us
 // The target struct to be transformed into
 res := ResultStruct{}
 
-// The first argument is the data to be transformed, the second argument is a pointer to the target struct, and the third argument is the target struct itself
-dbutil.MapToStruct(row, &res, res)
+// The first argument is the data to be transformed, the second argument is a pointer to the target struct
+dbutil.MapToStruct(row, &res)
 ```
 
 After the above transformation, the data will be available in res
@@ -206,10 +206,10 @@ resultMap, err := operation.GetDBTemplate("Data source name").SelectOne("select 
 res := ResultStruct{Id: 1}
 
 // Select multiple entries, note: placeholders are needed here
-resultMap, err := operation.GetDBTemplate("Data source name").SelectListByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res, res))
+resultMap, err := operation.GetDBTemplate("Data source name").SelectListByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res))
 
 // Select one, note: placeholders are needed here
-resultMap, err := operation.GetDBTemplate("Data source name").SelectOneByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res, res))
+resultMap, err := operation.GetDBTemplate("Data source name").SelectOneByMap("select * from xt_message_board where id < {id}", dbutil.StructToMap(&res))
 ```
 
 ### Adding, deleting and changing based on array parameters
@@ -230,7 +230,7 @@ operation.GetDBTemplate("Data source name").Exec("update xt_message_board set us
 res := ResultStruct{Id: 1, UserName: "TestUpdateByMap"}
 
 // Whether adding, deleting, or updating, the ExecByMap function is called, and the sql and parameters are passed in.
-operation.GetDBTemplate("Data source name").ExecByMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res, res))
+operation.GetDBTemplate("Data source name").ExecByMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res))
 
 ```
 
@@ -248,7 +248,7 @@ data := ResultStruct{
 param := entity.PageParam{
     CurrentPage: 1,  // Pages
     PageSize: 20,  // How many entries per page
-    Params: dbutil.StructToMap(&data, data), // Enquiry parameters
+    Params: dbutil.StructToMap(&data), // Enquiry parameters
 }
 
 // Performing a query operation
@@ -270,7 +270,7 @@ countSql := "Your own definition of countSql"
 param := entity.PageParam{
     CurrentPage: 1,  // Pages
     PageSize: 20,  // How many entries per page
-    Params: dbutil.StructToMap(&data, data), // Enquiry parameters
+    Params: dbutil.StructToMap(&data), // Enquiry parameters
 }
 
 // Performing a query operation
@@ -313,7 +313,7 @@ res := ResultStruct{Id: 1, UserName: "TestUpdateTx"}
 
 // Note: GetDBTemplateTx and ExecByTxMap must be used here.
 // The difference between using a transaction and not using a transaction, in terms of the functions called, is that there is an additional Tx
-ss, err := operation.GetDBTemplateTx(id, "dbPoolTest").ExecByTxMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res, res))
+ss, err := operation.GetDBTemplateTx(id, "dbPoolTest").ExecByTxMap("update xt_message_board set user_name = {user_name} where id = {id}", dbutil.StructToMap(&res))
 
 if err != nil {
     // Roll back the transaction if there is a problem
