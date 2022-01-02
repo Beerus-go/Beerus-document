@@ -39,7 +39,7 @@ In addition to direct support, you can also indirectly support Oh, follow my WeC
         <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/tealgram.jpeg" width="200px"/></td>
     </tr>
     <tr style="border:0px; background-color:#ffffff">
-        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">WeChat Public: Magician-IO</p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">WeChat Public: Beerus开源社区</p></td>
         <td style="border:0px;text-align:center" valign="top"><p style="width:150px">QQ Group: 773291321</p></td>
         <td style="border:0px;text-align:center" valign="top"><p style="width:150px">Telegram: <a href="https://t.me/beeruscc">https://t.me/beeruscc</a></p></td>
     </tr>
