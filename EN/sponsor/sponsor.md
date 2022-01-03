@@ -10,11 +10,13 @@ If you like the project and would like to help, then buy the author a cup of cof
 
 <table style="border:0px">
     <tr style="border:0px">
+        <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/wx.webp" width="200px"/></td>
         <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/paypal.jpeg" width="200px"/></td>
         <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/eth.webp" width="200px"/></td>
         <td style="border:0px;text-align:center"><img src="https://beeruscc.com/source/images/btc.webp" width="200px"/></td>
     </tr>
     <tr style="border:0px; background-color:#ffffff">
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px">WeChat Pay</p></td>
         <td style="border:0px;text-align:center" valign="top">
             <p style="width:150px;word-wrap: break-word; word-break: normal;">
                 Paypal:
