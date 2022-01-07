@@ -218,7 +218,7 @@ route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse
 It's easy to turn off, just add the following code before creating the route
 
 ```go
-route.JsonMode = true
+route.JsonMode = false
 ```
 
 Once JSON mode is turned off, automatic validation will not work as beerus cannot predict what type of data you intend to return to the front end, so the developer will need to manually call a function to validate

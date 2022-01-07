@@ -8,8 +8,8 @@
     
     <meta name="description" content="用Go语言开发的Web解决方案">
     
-    <link rel="preload" href="/cn/assets/css/0.styles.6d5817d4.css" as="style"><link rel="preload" href="/cn/assets/js/app.ff557f15.js" as="script"><link rel="preload" href="/cn/assets/js/2.67bc9379.js" as="script"><link rel="preload" href="/cn/assets/js/8.b035d9a5.js" as="script"><link rel="prefetch" href="/cn/assets/js/10.4a958386.js"><link rel="prefetch" href="/cn/assets/js/11.6c6b97ff.js"><link rel="prefetch" href="/cn/assets/js/3.a03d7581.js"><link rel="prefetch" href="/cn/assets/js/4.22a9a151.js"><link rel="prefetch" href="/cn/assets/js/5.c776c5b5.js"><link rel="prefetch" href="/cn/assets/js/6.cee21277.js"><link rel="prefetch" href="/cn/assets/js/7.ed290689.js"><link rel="prefetch" href="/cn/assets/js/9.46c81c59.js">
-    <link rel="stylesheet" href="/cn/assets/css/0.styles.6d5817d4.css">
+    <link rel="preload" href="/cn/assets/css/0.styles.e8732725.css" as="style"><link rel="preload" href="/cn/assets/js/app.e1389d08.js" as="script"><link rel="preload" href="/cn/assets/js/2.67bc9379.js" as="script"><link rel="preload" href="/cn/assets/js/8.d61e18d0.js" as="script"><link rel="prefetch" href="/cn/assets/js/10.bc34fb4a.js"><link rel="prefetch" href="/cn/assets/js/11.9aa3dae9.js"><link rel="prefetch" href="/cn/assets/js/3.b3f0d358.js"><link rel="prefetch" href="/cn/assets/js/4.96e9b071.js"><link rel="prefetch" href="/cn/assets/js/5.c776c5b5.js"><link rel="prefetch" href="/cn/assets/js/6.cee21277.js"><link rel="prefetch" href="/cn/assets/js/7.20bb3ad0.js"><link rel="prefetch" href="/cn/assets/js/9.6430648e.js">
+    <link rel="stylesheet" href="/cn/assets/css/0.styles.e8732725.css">
   </head>
   <body>
     <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/cn/" class="home-link router-link-active"><!----> <span class="site-name">Beerus</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/cn/" class="nav-link">
@@ -168,7 +168,7 @@ route<span class="token punctuation">.</span><span class="token function">GET</s
 	<span class="token comment">// 返回这个常量即可</span>
 	<span class="token keyword">return</span> web<span class="token punctuation">.</span>Download
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
-</code></pre></div><h3 id="关闭json模式"><a href="#关闭json模式" class="header-anchor">#</a> 关闭JSON模式</h3> <p>关闭方式很简单， 只需要在创建路由前，加入以下代码即可</p> <div class="language-go extra-class"><pre class="language-go"><code>route<span class="token punctuation">.</span>JsonMode <span class="token operator">=</span> <span class="token boolean">true</span>
+</code></pre></div><h3 id="关闭json模式"><a href="#关闭json模式" class="header-anchor">#</a> 关闭JSON模式</h3> <p>关闭方式很简单， 只需要在创建路由前，加入以下代码即可</p> <div class="language-go extra-class"><pre class="language-go"><code>route<span class="token punctuation">.</span>JsonMode <span class="token operator">=</span> <span class="token boolean">false</span>
 </code></pre></div><p>JSON模式一旦关闭，自动校验功能将会失效，因为beerus无法预知你打算用什么类型给前端响应，所以就直接把这个权限交给开发者了</p> <ul><li>在你的路由里面，加上如下代码即可</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// 调用params.Validation 函数进行验证，第二个参数是提取到了请求参数的 struct的指针</span>
 <span class="token keyword">var</span> result <span class="token operator">=</span> params<span class="token punctuation">.</span><span class="token function">Validation</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> <span class="token operator">&amp;</span>param<span class="token punctuation">)</span>
 <span class="token comment">// 当返回的不是SUCCESS，就说明验证没通过</span>
@@ -262,6 +262,6 @@ err <span class="token operator">=</span> session<span class="token punctuation"
 	<span class="token function">println</span><span class="token punctuation">(</span>util<span class="token punctuation">.</span><span class="token function">BytesToString</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span>
 </code></pre></div><p>接收到数据以后，直接转成string即可</p> <h2 id="数据库操作"><a href="#数据库操作" class="header-anchor">#</a> 数据库操作</h2> <p><a href="/cn/beerusdb/index.html">点击此处-&gt;跳转到数据库操作</a></p></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
-    <script src="/cn/assets/js/app.ff557f15.js" defer></script><script src="/cn/assets/js/2.67bc9379.js" defer></script><script src="/cn/assets/js/8.b035d9a5.js" defer></script>
+    <script src="/cn/assets/js/app.e1389d08.js" defer></script><script src="/cn/assets/js/2.67bc9379.js" defer></script><script src="/cn/assets/js/8.d61e18d0.js" defer></script>
   </body>
 </html>

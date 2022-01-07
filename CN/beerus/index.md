@@ -219,7 +219,7 @@ route.GET("/downLoad/file", func(req commons.BeeRequest, res commons.BeeResponse
 关闭方式很简单， 只需要在创建路由前，加入以下代码即可
 
 ```go
-route.JsonMode = true
+route.JsonMode = false
 ```
 
 JSON模式一旦关闭，自动校验功能将会失效，因为beerus无法预知你打算用什么类型给前端响应，所以就直接把这个权限交给开发者了
