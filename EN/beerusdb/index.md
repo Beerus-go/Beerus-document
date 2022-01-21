@@ -5,7 +5,7 @@
 ### Installing dependencies
 
 ```shell
-go get github.com/yuyenews/Beerus-DB@v1.1.2
+go get github.com/yuyenews/Beerus-DB@v1.1.3
 
 go get github.com/go-sql-driver/mysql
 ```
@@ -64,10 +64,11 @@ This code only needs to be executed once when the project starts
 ### Search for single table data based on conditions
 
 ```go
-conditions := make([]*entity.Condition,0)
-conditions = append(conditions, entity.GetCondition("id > ?", 10))
-conditions = append(conditions, entity.GetCondition("and (user_name = ? or age > ?)", "bee", 18))
-conditions = append(conditions, entity.GetCondition("order by create_time desc", entity.NotWhere))
+conditions := builder.Create().
+    Add("id > ?", 10).
+    Add("and (user_name = ? or age > ?)", "bee", 18).
+    Add("order by create_time desc", entity.NotWhere).
+    Build()
 
 resultMap, err := operation.GetDBTemplate("Data source name").Select("table name", conditions)
 ```
@@ -76,8 +77,9 @@ resultMap, err := operation.GetDBTemplate("Data source name").Select("table name
 
 ```go
 // Conditions set
-conditions := make([]*entity.Condition,0)
-conditions = append(conditions, entity.GetCondition("id = ?", 1))
+conditions := builder.Create().
+    Add("id = ?", 1).
+    Build()
 
 // Data settings to be modified
 data := ResultStruct{UserName: "TestNoSqlUpdate"}
@@ -90,8 +92,9 @@ result, err := operation.GetDBTemplate("Data source name").Update("table name", 
 
 ```go
 // Set delete conditions
-conditions := make([]*entity.Condition,0)
-conditions = append(conditions, entity.GetCondition("id = ?", 2))
+conditions := builder.Create().
+    Add("id = ?", 2).
+    Build()
 
 // Perform a delete operation
 _, err := operation.GetDBTemplate("Data source name").Delete("table name", conditions)
@@ -126,17 +129,19 @@ type Condition struct {
 The following examples can be seen
 
 ```go
-conditions := make([]*entity.Condition,0)
+conditions := builder.Create().
 
 // Here is the Key set to where condition, so val must be the value of where, that is, the query id > 10 data, placeholder only support ?
-conditions = append(conditions, entity.GetCondition("id > ?", 10))
+Add("id > ?", 10).
 
 // Same as above, but with an extra and in front, because he is the second condition, so you need to use the conjunction, you can use and, or
 // Like the example, if and is followed by a conditional combination, you can write it like this, Val is a... type that can be infinitely appended to
-conditions = append(conditions, entity.GetCondition("and (user_name = ? or age > ?)", "bee", 18))
+Add("and (user_name = ? or age > ?)", "bee", 18).
 
 // Here the Key is set as a sort condition, so Val doesn't need to be given a value, just set it to entity.NotWhere
-conditions = append(conditions, entity.GetCondition("order by create_time desc", entity.NotWhere))
+Add("order by create_time desc", entity.NotWhere).
+
+Builder()
 
 ```
 

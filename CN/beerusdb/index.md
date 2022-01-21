@@ -5,7 +5,7 @@
 ### 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus-DB@v1.1.2
+go get github.com/yuyenews/Beerus-DB@v1.1.3
 
 go get github.com/go-sql-driver/mysql
 ```
@@ -66,10 +66,11 @@ db.AddDataSource("dbPoolTest2", dbPool2)
 ### 根据条件查询单表数据
 
 ```go
-conditions := make([]*entity.Condition,0)
-conditions = append(conditions, entity.GetCondition("id > ?", 10))
-conditions = append(conditions, entity.GetCondition("and (user_name = ? or age > ?)", "bee", 18))
-conditions = append(conditions, entity.GetCondition("order by create_time desc", entity.NotWhere))
+conditions := builder.Create().
+    Add("id > ?", 10).
+    Add("and (user_name = ? or age > ?)", "bee", 18).
+    Add("order by create_time desc", entity.NotWhere).
+    Build()
 
 resultMap, err := operation.GetDBTemplate("Data source name").Select("table name", conditions)
 ```
@@ -78,8 +79,9 @@ resultMap, err := operation.GetDBTemplate("Data source name").Select("table name
 
 ```go
 // 条件设定
-conditions := make([]*entity.Condition,0)
-conditions = append(conditions, entity.GetCondition("id = ?", 1))
+conditions := builder.Create().
+    Add("id = ?", 1).
+    Build()
 
 // 要修改的数据设定
 data := ResultStruct{UserName: "TestNoSqlUpdate"}
@@ -92,8 +94,9 @@ result, err := operation.GetDBTemplate("Data source name").Update("table name", 
 
 ```go
 // 设定删除条件
-conditions := make([]*entity.Condition,0)
-conditions = append(conditions, entity.GetCondition("id = ?", 2))
+conditions := builder.Create().
+    Add("id = ?", 2).
+    Build()
 
 // 执行删除操作
 _, err := operation.GetDBTemplate("Data source name").Delete("table name", conditions)
@@ -128,17 +131,19 @@ type Condition struct {
 可以看如下实例
 
 ```go
-conditions := make([]*entity.Condition,0)
+conditions := builder.Create().
 
 // 这里就是将Key设定成where条件了，所以val必须是where的值，也就是查询 id > 10的数据，占位符只支持 ?
-conditions = append(conditions, entity.GetCondition("id > ?", 10))
+Add("id > ?", 10).
 
 // 这里同上，只是前面多了一个and，因为他是第二个条件，所以需要用连接符，可以用 and，or
 // 像示例这样，如果and 后面 要跟一个条件组合，可以这么写，Val是一个... 类型，可以无限的往后追加参数
-conditions = append(conditions, entity.GetCondition("and (user_name = ? or age > ?)", "bee", 18))
+Add("and (user_name = ? or age > ?)", "bee", 18).
 
 // 这里就是将Key设定成 排序条件了，所以Val不需要给值，只需要设置成 entity.NotWhere 即可
-conditions = append(conditions, entity.GetCondition("order by create_time desc", entity.NotWhere))
+Add("order by create_time desc", entity.NotWhere).
+
+Builder()
 
 ```
 
