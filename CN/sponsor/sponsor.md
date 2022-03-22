@@ -18,8 +18,8 @@ sidebar: 'false'
     <tr style="border:0px; background-color:#ffffff">
         <td style="border:0px;text-align:center" valign="top"><p style="width:150px">微信</p></td>
         <td style="border:0px;text-align:center" valign="top"><p style="width:150px">支付宝</p></td>
-        <td style="border:0px;text-align:center" valign="top"><p style="width:150px;word-wrap: break-word; word-break: normal;">ETH：0xEcaceF1040C5dC8EE5430b5f252e3AaE7Bbb6EF3</p></td>
-        <td style="border:0px;text-align:center" valign="top"><p style="width:150px;word-wrap: break-word; word-break: normal;">USDT(ERC-20)：0xEcaceF1040C5dC8EE5430b5f252e3AaE7Bbb6EF3</p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px;word-wrap: break-word; word-break: normal;">ETH：0xb4e32492E9725c3215F1662Cf28Db1862ed1EE84</p></td>
+        <td style="border:0px;text-align:center" valign="top"><p style="width:150px;word-wrap: break-word; word-break: normal;">USDT(ERC-20)：0xb4e32492E9725c3215F1662Cf28Db1862ed1EE84</p></td>
     </tr>
 </table>
 
