@@ -5,7 +5,7 @@
 ### 安装依赖
 
 ```shell
-go get github.com/yuyenews/Beerus-DB@v1.1.3
+go get github.com/Beerus-go/Beerus-DB@v1.1.3
 
 go get github.com/go-sql-driver/mysql
 ```
