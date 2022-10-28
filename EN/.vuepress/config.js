@@ -4,8 +4,8 @@ module.exports = {
     themeConfig: {
         nav: [
           { text: 'Home', link: '/' },     
-          { text: 'Github', link: 'https://github.com/yuyenews' },              
-          { text: 'Discussions', link: 'https://github.com/yuyenews/Beerus/discussions' },
+          { text: 'Github', link: 'https://github.com/Beerus-go' },              
+          { text: 'Discussions', link: 'https://github.com/Beerus-go/Beerus/discussions' },
           { text: 'Telegram', link: 'https://t.me/beeruscc'},
           { text: 'Sponsor', link: '/sponsor/sponsor.md' }, 
           {
