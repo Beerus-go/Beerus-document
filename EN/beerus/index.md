@@ -3,7 +3,7 @@
 ## Installing dependencies
 
 ```shell
-go get github.com/Beerus-go/Beerus@v1.1.7
+go get github.com/Beerus-go/Beerus@v1.1.9
 ```
 
 ## The underlying technology used
