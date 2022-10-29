@@ -1,8 +1,8 @@
 ---
 home: true
 heroImage: https://beeruscc.com/source/images/logo.png
-actionText: Document →
-actionLink: /beerus/index.md
+actionText: Video →
+actionLink: https://www.bilibili.com/video/BV1cZ4y1X79f/?spm_id_from=333.999.0.0&vd_source=f4c8caf8f0691160cc645e85690569be
 features:
 - title: Beerus
   details: Based on net/http, it extends the management of routes, adds interceptors, session management, receiving parameters with struct, parameter validation, etc. It also provides WebSocket support to upgrade the http protocol to WebSocket and implement communication.
